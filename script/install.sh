@@ -1,0 +1,2 @@
+pip install flytekit
+pip install flytekitplugins-flyteinteractive
