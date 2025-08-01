@@ -1,10 +1,10 @@
-from flytekit import task, workflow
+from flytekit import task, workflow,Resources
 from flytekitplugins.flyteinteractive import vscode
 
 
 @task(
-    # 使用官方的 flyteinteractive 镜像
-    container_image="ghcr.io/flyteorg/flytekit:flyteinteractive-latest"
+    container_image="ghcr.io/flyteorg/flytekit:flyteinteractive-latest",
+    requests=Resources(cpu="1", mem="2000Mi"),
 )
 
 @vscode
