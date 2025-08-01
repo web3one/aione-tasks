@@ -2,7 +2,11 @@ from flytekit import task, workflow
 from flytekitplugins.flyteinteractive import vscode
 
 
-@task
+@task(
+    # 使用官方的 flyteinteractive 镜像
+    container_image="ghcr.io/flyteorg/flytekit:flyteinteractive-latest"
+)
+
 @vscode
 def train():
     print("forward")
