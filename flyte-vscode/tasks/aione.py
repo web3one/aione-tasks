@@ -77,6 +77,11 @@ pod_template=PodTemplate(
 )
 @vscode
 def task1():
+    import subprocess
+    import sys
+    # 安装 kubernetes 包
+    subprocess.run([sys.executable, "-m", "pip", "install", "kubernetes"], check=True)
+
     print("IDE Started.")
 
 @workflow()
