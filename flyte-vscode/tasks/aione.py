@@ -54,7 +54,7 @@ pod_template=PodTemplate(
             V1Container(
                 name="aione-main-container",
                 #image="registry-tcenter-001.dc4-faas.fzyun.io/founder/aione.ide:1.0.0.54-dev",
-                image="docker.fzyun.io/founder/aione.flyteinteractive:1.1.0",
+                image="docker.fzyun.io/founder/aione.flyteinteractive:1.3.0",
                 volume_mounts=[],
                 resources=V1ResourceRequirements(
                     limits={"cpu": "2", "memory": "4Gi", "nvidia.com/gpu": "0"},
