@@ -3,7 +3,7 @@ from flytekitplugins.flyteinteractive import vscode
 
 
 @task(
-    container_image="ghcr.io/flyteorg/flytekit:flyteinteractive-latest",
+    container_image="docker.fzyun.io/founder/aione.flyteinteractive:1.1.0",
     requests=Resources(cpu="1", mem="2000Mi"),
 )
 
