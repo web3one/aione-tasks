@@ -1,1 +1,1 @@
-pyflyte run --remote ide.py wf_train
+pyflyte run --remote ide.py ide_train

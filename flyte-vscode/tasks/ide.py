@@ -14,9 +14,9 @@ def train():
 
 
 @workflow
-def wf_train():
+def ide_train():
     train()
 
 
 if __name__ == "__main__":
-    wf_train()
+    ide_train()
