@@ -65,7 +65,7 @@ pod_template=PodTemplate(
         ],
         tolerations=[],
         image_pull_secrets= [
-            V1EnvVar(name="image-secret-ins-0e4d65d4ijfw0a6817t9268ue2")
+            #V1EnvVar(name="image-secret-ins-0e4d65d4ijfw0a6817t9268ue2")
         ],
         volumes=[]
     )
