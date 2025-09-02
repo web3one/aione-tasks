@@ -41,7 +41,8 @@ class CephRBDDiskUsage:
     def _connect(self):
         """Connect to Ceph cluster and open IOContext for the pool."""
         if self.cluster is None:
-            print("-----"+self.conf_file)
+            print("---------------------")
+            print(self.conf_file)
             self.cluster = rados.Rados(conffile=self.conf_file)
             self.cluster.connect()
             self.ioctx = self.cluster.open_ioctx(self.pool_name)
