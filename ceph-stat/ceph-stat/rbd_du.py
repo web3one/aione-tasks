@@ -15,8 +15,8 @@ try:
     import rbd
 except ImportError as e:
     print("Error: Ceph Python bindings not found. Please install python3-rados and python3-rbd packages.")
-    print("Install using pip: pip install rados rbd")
-    print("Or using pip3: pip3 install rados rbd")
+    print("On Ubuntu/Debian: sudo apt-get install python3-rados python3-rbd")
+    print("On CentOS/RHEL: sudo yum install python3-rados python3-rbd")
     sys.exit(1)
 
 
@@ -34,17 +34,14 @@ class CephRBDDiskUsage:
             conf_file (str): Ceph configuration file path (default: ceph.conf in current directory)
         """
         self.pool_name = pool_name
-        # If no config file specified, use ceph.conf in current directory
-        if conf_file is None:
-            self.conf_file = os.path.join(os.getcwd(), "ceph.conf")
-        else:
-            self.conf_file = conf_file
+        self.conf_file = conf_file
         self.cluster = None
         self.ioctx = None
     
     def _connect(self):
         """Connect to Ceph cluster and open IOContext for the pool."""
         if self.cluster is None:
+            print(self.conf_file)
             self.cluster = rados.Rados(conffile=self.conf_file)
             self.cluster.connect()
             self.ioctx = self.cluster.open_ioctx(self.pool_name)
