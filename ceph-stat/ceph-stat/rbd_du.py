@@ -23,27 +23,54 @@ except ImportError as e:
 class CephRBDDiskUsage:
     """
     A Python API wrapper for Ceph RBD disk usage commands using native librados and librbd APIs.
+    Connects to Ceph using environment variables instead of configuration files.
+    
+    Required Environment Variables:
+        CEPH_MON_HOST: Ceph monitor hosts (e.g., "10.10.22.11:6789,10.10.22.12:6789")
+        CEPH_KEY: Ceph authentication key
+        CEPH_CLIENT_NAME: Ceph client name (optional, default: "client.fzyun-aione")
     """
     
-    def __init__(self, pool_name: str = "fzyun-aione", conf_file: str = None):
+    def __init__(self, pool_name: str = "fzyun-aione"):
         """
         Initialize the RBD disk usage API.
         
         Args:
             pool_name (str): The Ceph pool name (default: fzyun-aione)
-            conf_file (str): Ceph configuration file path (default: ceph.conf in current directory)
+            
+        Note: Connection configuration is read from environment variables:
+            - CEPH_MON_HOST: Required. Monitor hosts
+            - CEPH_KEY: Required. Authentication key  
+            - CEPH_CLIENT_NAME: Optional. Client name (default: client.fzyun-aione)
         """
         self.pool_name = pool_name
-        self.conf_file = conf_file
         self.cluster = None
         self.ioctx = None
     
     def _connect(self):
         """Connect to Ceph cluster and open IOContext for the pool."""
         if self.cluster is None:
-            print("---------------------")
-            print(self.conf_file)
-            self.cluster = rados.Rados(conffile=self.conf_file)
+
+            # Use environment variables instead of conffile
+            mon_host = os.environ.get('CEPH_MON_HOST','10.10.22.11:6789,10.10.22.12:6789,10.10.22.13:6789')
+            key = os.environ.get('CEPH_KEY','AQBZcpZlJIMxBBAAR7B8KmICIt9WAeWGPYFFtQ==')
+            client_name = os.environ.get('CEPH_CLIENT_NAME', 'client.fzyun-aione')
+            
+            if not mon_host:
+                raise RuntimeError("CEPH_MON_HOST environment variable is required")
+            if not key:
+                raise RuntimeError("CEPH_KEY environment variable is required")
+                
+            print(f"Connecting with mon_host: {mon_host}")
+            print(f"Using client: {client_name}")
+            
+            # Create rados cluster without conffile
+            self.cluster = rados.Rados(name=client_name)
+            
+            # Set configuration from environment variables
+            self.cluster.conf_set('mon_host', mon_host)
+            self.cluster.conf_set('key', key)
+            
             self.cluster.connect()
             self.ioctx = self.cluster.open_ioctx(self.pool_name)
     
@@ -162,13 +189,18 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python rbd_du.py <image_name> [pool_name]")
         print("Example: python rbd_du.py csi-vol-85eef94a-8325-11f0-b098-ae1f4bddac18 fzyun-aione")
+        print("")
+        print("Required Environment Variables:")
+        print("  CEPH_MON_HOST - Monitor hosts (e.g., '10.10.22.11:6789,10.10.22.12:6789')")
+        print("  CEPH_KEY - Authentication key")
+        print("  CEPH_CLIENT_NAME - Client name (optional, default: 'client.fzyun-aione')")
         sys.exit(1)
     
     image_name = sys.argv[1]
     pool_name = sys.argv[2] if len(sys.argv) > 2 else "fzyun-aione"
     
     try:
-        # Initialize the API
+        # Initialize the API (now uses environment variables)
         rbd_api = CephRBDDiskUsage(pool_name=pool_name)
         
         # Get usage information
