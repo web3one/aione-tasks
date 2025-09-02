@@ -183,7 +183,7 @@ def main():
 
     try:
         # Create CephRBDDiskUsage instance with the specified pool
-        ceph_rbd = CephRBDDiskUsage(pool_name)
+        ceph_rbd = CephRBDDiskUsage(pool_name,mon_host,key,client_name)
         usage_info = ceph_rbd.get_image_usage_info(image_name)
         # Output JSON formatted result
         print(json.dumps(usage_info, indent=2))
