@@ -15,8 +15,8 @@ try:
     import rbd
 except ImportError as e:
     print("Error: Ceph Python bindings not found. Please install python3-rados and python3-rbd packages.")
-    print("On Ubuntu/Debian: sudo apt-get install python3-rados python3-rbd")
-    print("On CentOS/RHEL: sudo yum install python3-rados python3-rbd")
+    print("Install using pip: pip install rados rbd")
+    print("Or using pip3: pip3 install rados rbd")
     sys.exit(1)
 
 
