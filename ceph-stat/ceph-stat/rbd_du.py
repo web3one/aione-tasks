@@ -81,6 +81,8 @@ class CephRBDDiskUsage:
             with rbd.Image(self.ioctx, image_name) as image:
                 # Get image statistics
                 stat = image.stat()
+
+                print(stat)
                 
                 # Get actual disk usage (used space)
                 # This requires calculating the used blocks
