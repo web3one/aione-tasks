@@ -154,7 +154,7 @@ restart_node() {
     
     # 等待Ceph状态恢复
     log_info "等待Ceph集群状态恢复..."
-    if wait_for_ceph_ok 300; then
+    if wait_for_ceph_ok 3000; then
         log_success "节点 $hostname 重启成功，Ceph集群状态正常"
         # 更新host.txt文件，标记为已重启
         sed -i "s/^$hostname$/$hostname 已重启 $(date '+%Y-%m-%d %H:%M:%S')/" "$HOST_FILE"
